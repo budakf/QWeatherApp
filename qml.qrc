@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
+        <file>icons/settings.svg</file>
     </qresource>
 </RCC>

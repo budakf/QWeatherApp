@@ -9,19 +9,52 @@ Window {
     height: Screen.desktopAvailableHeight
     title: qsTr("QWeatherApp")
 
-    Rectangle{
+    property string currentTemperature : "35"
+    property string minTemperature : "30"
+    property string maxTemperature : "40"
+
+    property color backgorundColor: "#81cdd7"
+    property color canvas1Color: "#41656A"
+    property color canvas2Color: "#3B5B5F"
+    property color atmosphereColor: "#FFD063"
+
+    Rectangle {
         id: background
         anchors.fill: parent
-        color: "#81cdd7"
+        color: backgorundColor
 
-        Text{
+        Text {
             id:text
             anchors.top: parent.top
-            anchors.topMargin: parent.height*0.25
+            anchors.topMargin: parent.height*0.2
             anchors.horizontalCenter: parent.horizontalCenter
-            text: "35°C"
-            font.pixelSize: 60
+            anchors.horizontalCenterOffset: parent.width * 0.05 * -1
+            text: currentTemperature
+            font.pixelSize: 80
             color: "white"
+            //°C
+        }
+
+        Rectangle {
+            id: atmosphere
+            color: atmosphereColor
+            width: Math.min(parent.height, parent.width) * 0.09
+            height: atmosphere.width
+            radius: width/2
+            anchors.left: text.right
+            anchors.leftMargin: parent.width * 0.03
+            anchors.top: parent.top
+            anchors.topMargin: parent.height*0.235
+        }
+
+        Text {
+            id: minMaxDegree
+            color: "white"
+            text: minTemperature+"° / " + maxTemperature + "°"
+            font.pixelSize: 30
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.top: text.bottom
+            anchors.topMargin: parent.height*0.03
         }
 
         Canvas {
@@ -34,9 +67,9 @@ Window {
                 var ctx = getContext("2d")
                 // setup the stroke
                 ctx.lineWidth = 4
-                ctx.strokeStyle = "#41656A"
+                ctx.strokeStyle = canvas1Color
                 // setup the fill
-                ctx.fillStyle = "#41656A"
+                ctx.fillStyle = canvas1Color
                 // begin a new path to draw
                 ctx.beginPath()
                 // top-left start point
@@ -60,9 +93,9 @@ Window {
                 var ctx = getContext("2d")
                 // setup the stroke
                 ctx.lineWidth = 1
-                ctx.strokeStyle = "#3B5B5F"
+                ctx.strokeStyle = canvas2Color
                 // setup the fill
-                ctx.fillStyle = "#3B5B5F"
+                ctx.fillStyle = canvas2Color
                 // begin a new path to draw
                 ctx.beginPath()
                 // top-left start point
@@ -76,4 +109,5 @@ Window {
         }
 
     }
+
 }
