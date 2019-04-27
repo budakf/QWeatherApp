@@ -1,6 +1,9 @@
 import QtQuick 2.12
 import QtQuick.Window 2.12
 import QtQuick.Shapes 1.12
+import QtQuick.Controls 2.5
+
+// import budakf.qweatherapp.weathercondition 1.0
 
 Window {
     id: root
@@ -9,53 +12,26 @@ Window {
     height: Screen.desktopAvailableHeight
     title: qsTr("QWeatherApp")
 
-    property string currentTemperature : "35"
-    property string minTemperature : "30"
-    property string maxTemperature : "40"
+    property variant weatherData :{
+        'city': "-" ,
+        'currentTemperature': "-" ,
+        'minTemperature': "-" ,
+        'maxTemperature': "-" ,
+        'weatherDetails': "-"
+    }
 
-    property color backgorundColor: "#81cdd7"
+    property color backgorundColor: "#81cdbb"
     property color canvas1Color: "#41656A"
     property color canvas2Color: "#3B5B5F"
     property color atmosphereColor: "#FFD063"
 
     Rectangle {
         id: background
+        objectName: "backgroundObject"
         anchors.fill: parent
         color: backgorundColor
 
-        Text {
-            id:text
-            anchors.top: parent.top
-            anchors.topMargin: parent.height*0.2
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.horizontalCenterOffset: parent.width * 0.05 * -1
-            text: currentTemperature
-            font.pixelSize: 80
-            color: "white"
-            //°C
-        }
-
-        Rectangle {
-            id: atmosphere
-            color: atmosphereColor
-            width: Math.min(parent.height, parent.width) * 0.09
-            height: atmosphere.width
-            radius: width/2
-            anchors.left: text.right
-            anchors.leftMargin: parent.width * 0.03
-            anchors.top: parent.top
-            anchors.topMargin: parent.height*0.235
-        }
-
-        Text {
-            id: minMaxDegree
-            color: "white"
-            text: minTemperature+"° / " + maxTemperature + "°"
-            font.pixelSize: 30
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.top: text.bottom
-            anchors.topMargin: parent.height*0.03
-        }
+        signal isDataReady
 
         Canvas {
             id: canvas
@@ -108,6 +84,85 @@ Window {
             }
         }
 
+        SwipeView{
+            id: view
+            currentIndex: 0
+            anchors.fill: parent
+
+            onCurrentItemChanged: {
+                console.log("currentIndex", currentIndex)
+//                view.currentItem.city= "Liverpool"
+//                view.currentItem.temperature= "25"
+//                view.currentItem.degrees= "20° / 30°"
+//                view.currentItem.sun= "gray"
+            }
+
+            ViewItem{
+                id: firstItem
+                city: weatherData.city
+                temperature: weatherData.currentTemperature
+                degrees: weatherData.minTemperature + "° / " + weatherData.maxTemperature + "°"
+                sun: atmosphereColor
+            }
+
+            ViewItem{
+                id: secondItem
+                city: "-"
+                temperature: "-"
+                degrees: "-" + "° / " + "-" + "°"
+                sun: atmosphereColor
+            }
+
+            ViewItem{
+                id: thirdItem
+                city: "-"
+                temperature: "-"
+                degrees: "-" + "° / " + "-" + "°"
+                sun: atmosphereColor
+            }
+
+        }
+
+        PageIndicator{
+            id: indicator
+            count: view.count
+            currentIndex: view.currentIndex
+            anchors.bottom: background.bottom
+            anchors.bottomMargin: parent.height * 0.05
+            anchors.horizontalCenter: parent.horizontalCenter
+        }
+
+        Rectangle{
+            id:settingsWrapper
+            anchors.right: parent.right
+            anchors.rightMargin: parent.width * 0.05
+            anchors.top: parent.top
+            anchors.topMargin: parent.height * 0.025
+            width: Math.min(parent.height, parent.width) * 0.06
+            height: Math.min(parent.height, parent.width) * 0.06
+            color: backgorundColor
+            Image{
+                id:settings
+                source: "qrc:/icons/settings.svg"
+                anchors.fill: parent
+                MouseArea{
+                    anchors.fill: parent
+                    onClicked: {
+                        console.log("Clicked Settings")
+                    }
+                }
+            }
+        }
+
+        onIsDataReady: {
+            weatherData = WeatherCondition.getData()
+        }
+
+    }
+
+    Component.onCompleted: {
+        WeatherCondition.setCity("Barcelona")
+        WeatherCondition.takeWeatherForecastFromApiWithCityName()
     }
 
 }
