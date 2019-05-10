@@ -1,4 +1,4 @@
-QT += quick xml svg
+QT += quick svg quickcontrols2
 CONFIG += c++17
 
 # The following define makes your compiler emit warnings if you use
@@ -14,7 +14,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-    WeatherCondition.cpp
+    jsonreader.cpp \
+    weathercondition.cpp
 
 RESOURCES += qml.qrc
 
@@ -32,4 +33,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 DISTFILES +=
 
 HEADERS += \
-    WeatherCondition.h
+    jsonreader.h \
+    weathercondition.h

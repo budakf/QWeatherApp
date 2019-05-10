@@ -3,5 +3,8 @@
         <file>main.qml</file>
         <file>icons/settings.svg</file>
         <file>ViewItem.qml</file>
+        <file>SettingsPage.qml</file>
+        <file>icons/left-arrow.svg</file>
+        <file>city-list.json</file>
     </qresource>
 </RCC>
