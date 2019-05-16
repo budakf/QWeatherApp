@@ -15,7 +15,7 @@ Rectangle{
         anchors.top: parent.top
         anchors.topMargin: parent.height * 0.1
         anchors.horizontalCenter: parent.horizontalCenter
-        //text: cityName
+        text: "cityName"
         font.pixelSize: 40
         color: "#E8ECED"
     }
@@ -26,14 +26,14 @@ Rectangle{
         anchors.topMargin: parent.height*0.2
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.horizontalCenterOffset: parent.width * 0.05 * -1
-        //text: currentTemperature
+        text: "currentTemperature"
         font.pixelSize: 80
         color: "#E8ECED"
     }
 
     Rectangle {
         id: atmosphere
-        //color: atmosphereColor
+        color: "transparent"
         width: Math.min(parent.height, parent.width) * 0.09
         height: atmosphere.width
         radius: width/2
@@ -46,7 +46,7 @@ Rectangle{
     Text {
         id: minMaxDegree
         color: "#E8ECED"
-        //text: minTemperature+"° / " + maxTemperature + "°"
+        text: minTemperature+"° / " + maxTemperature + "°"
         font.pixelSize: 30
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.top: textTemperature.bottom

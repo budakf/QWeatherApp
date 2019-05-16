@@ -126,10 +126,10 @@ Rectangle {
                     cities[0] = firstChoice.currentText
                     cities[1] = secondChoice.currentText
                     cities[2] = thirdChoice.currentText
-                    console.log(cities[0])
-                    console.log(cities[1])
-                    console.log(cities[2])
                     citiesChanged()
+                    WeatherCondition.clearData()
+                    WeatherCondition.setCity(cities[0])
+                    WeatherCondition.takeWeatherForecastFromApiWithCityName()
                 }
             }
             Text {

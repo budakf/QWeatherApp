@@ -2,6 +2,7 @@ import QtQuick 2.12
 import QtQuick.Window 2.12
 import QtQuick.Shapes 1.12
 import QtQuick.Controls 2.5
+import QtTest 1.12
 
 
 Window {
@@ -11,16 +12,13 @@ Window {
     height: Screen.desktopAvailableHeight
     title: qsTr("QWeatherApp")
 
-    property variant cities : ["Liverpool", "Barcelona", "Kirsehir"]
+    property variant cities : ["Liverpool", "Barcelona", "Ankara"]
 
     onCitiesChanged: {
-        //weatherDataFirst.city = cities[0]
-        //weatherDataSecond.city = cities[1]
-        //weatherDataThird.city = cities[2]
+        console.log("onCitiesChanged")
     }
 
     property var weatherDataFirst: {
-        'city': cities[0] ,
         'currentTemperature': "-" ,
         'minTemperature': "-" ,
         'maxTemperature': "-" ,
@@ -28,7 +26,6 @@ Window {
     }
 
     property var weatherDataSecond: {
-        'city': cities[1] ,
         'currentTemperature': "-" ,
         'minTemperature': "-" ,
         'maxTemperature': "-" ,
@@ -36,11 +33,22 @@ Window {
     }
 
     property var weatherDataThird: {
-        'city': cities[2] ,
         'currentTemperature': "-" ,
         'minTemperature': "-" ,
         'maxTemperature': "-" ,
         'weatherDetails': "-"
+    }
+
+    onWeatherDataFirstChanged: {
+        console.log("onWeatherDataFirstChanged")
+    }
+
+    onWeatherDataSecondChanged: {
+        console.log("onWeatherDataSecondChanged")
+    }
+
+    onWeatherDataThirdChanged: {
+        console.log("onWeatherDataThirdChanged")
     }
 
     property color backgorundColor: "#81cdbb"
@@ -54,7 +62,9 @@ Window {
         anchors.fill: parent
         color: backgorundColor
 
-        signal dataReady
+        signal firstDataReady
+        signal secondDataReady
+        signal thirdDataReady
 
         Canvas {
             id: canvas
@@ -114,20 +124,11 @@ Window {
 
             onCurrentItemChanged: {
                 console.log("currentIndex", currentIndex)
-//                view.currentItem.city = "Liverpool"
-//                view.currentItem.temperature = "25"
-//                view.currentItem.degrees = "20° / 30°"
-//                view.currentItem.sun = "gray"
-
-                console.log(cities)
-                console.log(weatherDataFirst.city)
-                console.log(weatherDataSecond.city)
-                console.log(weatherDataThird.city)
             }
 
             ViewItem{
                 id: firstItem
-                city: weatherDataFirst.city
+                city: cities[0]
                 temperature: weatherDataFirst.currentTemperature
                 degrees: weatherDataFirst.minTemperature + "° / " + weatherDataFirst.maxTemperature + "°"
                 sun: atmosphereColor
@@ -135,7 +136,7 @@ Window {
 
             ViewItem{
                 id: secondItem
-                city: weatherDataSecond.city
+                city: cities[1]
                 temperature: weatherDataSecond.currentTemperature
                 degrees: weatherDataSecond.minTemperature + "° / " + weatherDataSecond.maxTemperature + "°"
                 sun: atmosphereColor
@@ -143,7 +144,7 @@ Window {
 
             ViewItem{
                 id: thirdItem
-                city: weatherDataThird.city
+                city: cities[2]
                 temperature: weatherDataThird.currentTemperature
                 degrees: weatherDataThird.minTemperature + "° / " + weatherDataThird.maxTemperature + "°"
                 sun: atmosphereColor
@@ -186,8 +187,23 @@ Window {
             }
         }
 
-        onDataReady: {
-            weatherDataFirst = WeatherCondition.getData()
+        onFirstDataReady: {
+            getData(weatherDataFirst)
+            weatherDataFirstChanged()
+            WeatherCondition.setCity(cities[1])
+            WeatherCondition.takeWeatherForecastFromApiWithCityName()
+        }
+
+        onSecondDataReady: {
+            getData(weatherDataSecond)
+            weatherDataSecondChanged()
+            WeatherCondition.setCity(cities[2])
+            WeatherCondition.takeWeatherForecastFromApiWithCityName()
+        }
+
+        onThirdDataReady: {
+            getData(weatherDataThird)
+            weatherDataThirdChanged()
         }
 
     }
@@ -203,8 +219,18 @@ Window {
     }
 
     Component.onCompleted: {
-        WeatherCondition.setCity(weatherDataFirst.city)
+        WeatherCondition.setCity(cities[0])
         WeatherCondition.takeWeatherForecastFromApiWithCityName()
     }
 
+    function getData(weatherData){
+        var data = WeatherCondition.getData()
+        weatherData.currentTemperature = data[data.city + "_currentTemperature"]
+        weatherData.minTemperature = data[data.city + "_minTemperature"]
+        weatherData.maxTemperature = data[data.city + "_maxTemperature"]
+        weatherData.weatherDetails = data[data.city + "_weatherDetails"]
+    }
+
 }
+
+

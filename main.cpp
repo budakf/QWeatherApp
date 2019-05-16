@@ -22,7 +22,9 @@ int main(int argc, char *argv[])
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
 
     QObject * background = engine.rootObjects().first()->findChild<QObject *>("backgroundObject");
-    QObject::connect( weatherCondition, SIGNAL(dataReady()), background, SIGNAL(dataReady()) );
+    QObject::connect( weatherCondition, SIGNAL(firstDataReady()), background, SIGNAL(firstDataReady()) );
+    QObject::connect( weatherCondition, SIGNAL(secondDataReady()), background, SIGNAL(secondDataReady()) );
+    QObject::connect( weatherCondition, SIGNAL(thirdDataReady()), background, SIGNAL(thirdDataReady()) );
 
     if (engine.rootObjects().isEmpty())
         return -1;

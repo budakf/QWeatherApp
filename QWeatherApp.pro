@@ -1,4 +1,4 @@
-QT += quick svg quickcontrols2
+QT += quick svg quickcontrols2 concurrent
 CONFIG += c++17
 
 # The following define makes your compiler emit warnings if you use
