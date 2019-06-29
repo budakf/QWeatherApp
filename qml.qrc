@@ -1,10 +1,9 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
-        <file>icons/settings.svg</file>
         <file>ViewItem.qml</file>
         <file>SettingsPage.qml</file>
-        <file>icons/left-arrow.svg</file>
         <file>city-list.json</file>
+        <file>icons/settings.svg</file>
     </qresource>
 </RCC>
